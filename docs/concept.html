@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Concept board · Internal Purchase Request system</title>
+<style>
+@font-face{font-family:"HT Rakik";font-weight:400;src:url(../prototype/pdf/brand/fonts/HTRakik-Regular.woff2) format("woff2")}
+@font-face{font-family:"HT Rakik";font-weight:600;src:url(../prototype/pdf/brand/fonts/HTRakik-SemiBold.woff2) format("woff2")}
+@font-face{font-family:"Bricolage Grotesque";font-weight:700;src:url(../prototype/pdf/brand/fonts/BricolageGrotesque-Bold.ttf) format("truetype")}
+:root{color-scheme:light dark;--bg:light-dark(#fff,#0b2a3c);--panel:light-dark(#ffeee8,#081c26);--ink:light-dark(#0b2a3c,#ffeee8);--muted:light-dark(#5e7580,#a7b4b9);--line:light-dark(#d7dfe2,#23485c);--accent:#df5323}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "HT Rakik",system-ui,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","HT Rakik",system-ui,sans-serif;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+h1{font-size:clamp(30px,5vw,44px);margin:0 0 10px}
+h2{font-size:26px;margin:56px 0 12px}
+h3{font-size:19px;margin:32px 0 8px}
+.wrap{max-width:1100px;margin:0 auto;padding:40px max(5vw,16px) 80px}
+.top{background:#0b2a3c;color:#ffeee8}
+.top .wrap{padding-block:36px}
+.top p{color:#a7b4b9;max-width:70ch;margin:0}
+.counts{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.counts div{background:rgba(255,238,232,.08);border-radius:12px;padding:10px 16px}
+.counts b{display:block;font:700 26px "Bricolage Grotesque",sans-serif}
+.counts span{font-size:14px;color:#a7b4b9}
+nav.toc{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:18px;font-size:15px}
+nav.toc a{color:#ffeee8}
+p.lead{max-width:75ch;color:var(--muted)}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{text-align:left;font-weight:600;background:var(--panel);padding:9px 12px;border-bottom:1px solid var(--ink)}
+td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+td.id{white-space:nowrap;font-weight:600;font-variant-numeric:tabular-nums}
+.pri{white-space:nowrap;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.pri::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--line)}
+.pri.now::before{background:var(--accent)}
+.pri.prd::before{background:var(--ink)}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
+.filters button{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer;min-height:36px}
+.filters button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.callout{background:var(--panel);border-radius:14px;padding:16px 20px;max-width:80ch}
+.callout ul{margin:6px 0 0;padding-left:20px}
+ol.road{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;padding:0;list-style:none;counter-reset:r}
+ol.road li{background:var(--panel);border-radius:14px;padding:16px;counter-increment:r}
+ol.road li::before{content:counter(r);display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--bg);font-weight:600;font-size:14px;margin-bottom:8px}
+ol.road li.cur::before{background:var(--accent);color:#fff}
+ol.road b{display:block}
+footer{color:var(--muted);font-size:14px;margin-top:48px}
+@media(max-width:640px){table{font-size:14px}th,td{padding:8px 6px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <h1>Concept board</h1>
+  <p>Internal Purchase Request system. What we have decided, what is assumed and still needs a yes or no, and what is open. This is the input for the PRD, not the PRD itself. IDs stay stable so we can refer to them in chat, for example "Q-14: yes".</p>
+  <div class="counts" id="counts"></div>
+  <nav class="toc"><a href="#process">How we work</a><a href="#team">Team</a><a href="#vision">Vision</a><a href="#decided">Decided</a><a href="#assumptions">Assumptions</a><a href="#questions">Open questions</a><a href="#parking">Parking lot</a></nav>
+</div></header>
+
+<main class="wrap">
+
+<h2 id="process">How we work</h2>
+<div class="scroll"><table>
+<thead><tr><th>Stage</th><th>Output</th><th>Who reviews</th><th>Gate to move on</th></tr></thead>
+<tbody>
+<tr><td><b>1. Concept</b> (now)</td><td>This board, process maps in BPMN 2.0 (HTML)</td><td>Mohamed</td><td>Every <i>Before PRD</i> question closed</td></tr>
+<tr><td><b>2. PRD</b></td><td><code>docs/prd.html</code></td><td>Product / project manager agent, senior full-stack engineer agent, then Mohamed</td><td>Mohamed approves the PRD</td></tr>
+<tr><td><b>3. UI/UX</b></td><td>Screens, user journeys, clickable prototype</td><td>UI/UX reviewer agent</td><td>All UI/UX comments closed</td></tr>
+<tr><td><b>4. Implementation plan</b></td><td>Phases with dependencies, added to the PRD</td><td>Senior full-stack engineer agent, cybersecurity auditor agent</td><td>Mohamed approves the plan</td></tr>
+<tr><td><b>5. Build</b>, phase by phase</td><td>Code, tests, release notes</td><td>Senior full-stack engineer agent each phase; other auditors when Mohamed calls them</td><td>Phase passes review with no regressions</td></tr>
+</tbody></table></div>
+<p class="lead">Reviewers are only called at the stages above, or when Mohamed asks.</p>
+
+<h2 id="team">The team</h2>
+<div class="scroll"><table>
+<thead><tr><th>Agent</th><th>Role</th><th>Called at</th></tr></thead>
+<tbody>
+<tr><td><b>Claude</b> (this session)</td><td>Orchestrator and programmer. Drafts documents, writes code, runs reviews, reports back.</td><td>Always</td></tr>
+<tr><td><b>Product / project manager</b></td><td>Leads scope and priorities. Challenges the PRD for gaps, conflicts, unclear acceptance criteria and scope creep.</td><td>PRD, phase planning</td></tr>
+<tr><td><b>UI/UX reviewer and auditor</b></td><td>Usability, mobile-first, accessibility (WCAG 2.2 AA), Arabic and right-to-left, brand compliance, journey friction.</td><td>UI/UX stage, then on request</td></tr>
+<tr><td><b>Senior full-stack engineer</b></td><td>Implements and reviews code. Reviews the PRD and plan for feasibility, architecture, data model, testing and regressions.</td><td>PRD, plan, every build phase</td></tr>
+<tr><td><b>Cybersecurity auditor</b></td><td>Login, email codes, signatures and sealing, secrets, OWASP ASVS and Top 10, Microsoft 365 permissions, audit trail, privacy (PDPL).</td><td>Plan, before go-live, on request</td></tr>
+</tbody></table></div>
+<p class="lead">The agents will be set up as Claude Code subagents in <code>.claude/agents/</code>. Each reads this board, the PRD and the process maps first, so they share full context.</p>
+
+<h2 id="vision">Vision and roadmap</h2>
+<p class="lead">The purchase request system is the first module of a larger internal operations platform for the group.</p>
+<ol class="road">
+  <li class="cur"><b>Internal purchase requests</b>This project: request, stock check, procurement approval, signed PDF.</li>
+  <li><b>Store and inventory</b>Stock per store, receipts, issues to projects. Fills "available in store" automatically.</li>
+  <li><b>Procurement</b>Suppliers, quotations, purchase orders and invoices, checked against internal standards.</li>
+</ol>
+<div class="callout"><b>What this means for the design now</b>
+<ul>
+  <li>A shared core that later modules reuse: companies, users and roles, projects and cost centres, items and units, approvals and signing, PDF and sealing, notifications, audit trail.</li>
+  <li>The PR module sits on top of that core, self-contained.</li>
+  <li>Hosting starts on Railway and may move to AWS, pay per use. Only portable building blocks (containers, PostgreSQL, S3-compatible file storage, Microsoft Graph or SMTP for email), so the move is a deployment change, not a rewrite.</li>
+</ul></div>
+
+<h2 id="decided">Decided</h2>
+<div class="scroll"><table>
+<thead><tr><th>ID</th><th>Decision</th><th>Source</th></tr></thead>
+<tbody id="decided-rows"></tbody></table></div>
+
+<h2 id="assumptions">Assumptions to confirm</h2>
+<div class="scroll"><table>
+<thead><tr><th>ID</th><th>Assumption</th><th>If wrong</th></tr></thead>
+<tbody id="assumption-rows"></tbody></table></div>
+
+<h2 id="questions">Open questions</h2>
+<p class="lead"><span class="pri now">Now</span> shapes the process maps. <span class="pri prd">Before PRD</span> must be answered before the PRD is written. <span class="pri">Later</span> can wait for UI or build.</p>
+<div class="filters" id="filters" role="group" aria-label="Filter by priority">
+  <button data-f="all" aria-pressed="true">All</button><button data-f="Now" aria-pressed="false">Now</button><button data-f="Before PRD" aria-pressed="false">Before PRD</button><button data-f="Later" aria-pressed="false">Later</button>
+</div>
+<div id="question-groups"></div>
+
+<h2 id="parking">Parking lot: future modules</h2>
+<div class="callout"><ul>
+  <li><b>Inventory:</b> stores per company or project, stock levels, receipts against POs, issues to projects, transfers.</li>
+  <li><b>Procurement:</b> supplier register, requests for quotation and quotation comparison, PO creation and approval, invoices, three-way match (PO, receipt, invoice), internal standards checks.</li>
+  <li><b>Group dashboards</b> across companies.</li>
+</ul></div>
+
+<footer>Project documents are written in HTML (D-20). Last updated 25 Nov 2026.</footer>
+</main>
+
+<script>
+{
+const DECIDED = [
+ ["D-01","Signatures are built into the app (option A): Microsoft 365 sign-in, email code at signing, content fingerprint, PAdES seal with trusted timestamp, audit trail. No external signature provider.","Chat, signature research"],
+ ["D-02","Each company adopts an internal e-signature policy naming this system as the agreed signing method.","Chat"],
+ ["D-03","Signing check: a 6-digit code emailed to the signer. No fresh Microsoft sign-in at signing.","Chat"],
+ ["D-04","No Microsoft Authenticator. Our own server sends the codes.","Chat"],
+ ["D-05","Login with Microsoft 365 accounts. Every signer has one.","Chat"],
+ ["D-06","Each user draws or uploads a signature image once, in their settings. It appears on every PDF they sign.","Chat"],
+ ["D-07","Signing order: requester, then store manager, then procurement. The PR reaches procurement for a PO only after all three have signed.","Chat"],
+ ["D-08","Rejection at any step sends the PR back to the requester. After editing, the whole cycle starts again and earlier signatures are voided.","Chat"],
+ ["D-09","Emails go out from a shared mailbox for the app.","Chat"],
+ ["D-10","A PDF can be exported at any stage, built from one standard template that matches the company's current paper form.","Chat, form shared"],
+ ["D-11","Multiple companies. The super admin creates companies; each company's settings (logo, CR number, colours, details) drive its PDFs.","Chat"],
+ ["D-12","The technical admin is a super admin who can see and control everything.","Chat"],
+ ["D-13","Other departments (HR, accounts and so on) can raise requests with a role like the project manager's.","Chat"],
+ ["D-14","Mobile-first. Creating a PR and doing the store check take as few steps as possible.","Chat"],
+ ["D-15","Hosting on Railway first; possible move to AWS later. No data-residency requirement.","Chat"],
+ ["D-16","The app uses Almiras branding.","Chat"],
+ ["D-17","UI built with shadcn/ui components. Theme (\"skin\") still to be confirmed (Q-02).","Chat"],
+ ["D-18","Process maps in BPMN 2.0, viewable in HTML.","Chat"],
+ ["D-19","Private repository; brand fonts are kept in it.","Chat"],
+ ["D-20","Project documents are written in HTML, not Markdown. Exceptions: CLAUDE.md and installed skills, which the tools require as Markdown.","Chat"]
+];
+const ASSUMPTIONS = [
+ ["A-01","All companies are in one Microsoft 365 tenant (one group tenant).","We need multi-tenant sign-in and per-company mailboxes."],
+ ["A-02","One shared mailbox sends all emails for the group (for example pr@almiras.sa).","Per-company sender addresses."],
+ ["A-03","A person can belong to more than one company, with a different role in each.","Simpler user model."],
+ ["A-04","Each company has its own store manager(s) and procurement team; they are not shared across the group.","Shared group procurement changes routing."],
+ ["A-05","The email code is also required at login on a new device, then the device is trusted for 30 days. Every signature always needs a fresh code.","Codes only at signing."],
+ ["A-06","One signer per step. Any user holding the role in that company can act on the step (first come, first served).","Named signers per project, or several signers per step."],
+ ["A-07","\"Qty\" on the form means the total needed; procurement buys Qty minus Available in store.","Qty already means \"to buy\"."],
+ ["A-08","Interface in English and Arabic (right-to-left layout); the PDF stays bilingual as in the sample.","English only for now."],
+ ["A-09","PR numbers follow <company code>-PR-<year>-<4-digit sequence>, restarting each year.","Different numbering."],
+ ["A-10","Records are kept at least 10 years (Saudi commercial record keeping) and never deleted, only cancelled.","Shorter retention."],
+ ["A-11","BPMN diagrams are drawn as real BPMN 2.0 XML and shown in HTML with bpmn-js, so they also open in standard BPMN tools.","Hand-drawn HTML diagrams."]
+];
+const QUESTIONS = [
+ ["Organisation, users and roles",[
+  ["Q-01","Do you mean a product manager (owns what we build) or a project manager (owns plan and timeline)? You used both.","Now"],
+  ["Q-02","Which shadcn/ui skill and which skin? (Not installed yet; send the command or link.)","Before PRD"],
+  ["Q-03","Besides the super admin, do we need a company admin who manages users, projects and settings for one company only?","Now"],
+  ["Q-04","Who creates projects and assigns requesters to them? Can a requester raise PRs on any project of the company, or only assigned ones?","Now"],
+  ["Q-05","For HR, accounts and other departments, is the \"project\" field replaced by a department or cost centre?","Now"],
+  ["Q-06","Delegation: when a store manager or procurement person is on leave, who signs? (A deputy, or the super admin reassigns.)","Before PRD"],
+  ["Q-07","Do we need a read-only role (for example finance, management, internal audit)?","Before PRD"]]],
+ ["The PR process",[
+  ["Q-08","If the store has everything in stock, does the PR stop at the store (fulfilled from stock), or still go to procurement?","Now"],
+  ["Q-09","Does the store manager issue stock to the project at this point, or only report what is available?","Now"],
+  ["Q-10","Can the store manager or procurement edit lines (for example cut a quantity), or only approve or return?","Now"],
+  ["Q-11","Can a reviewer return or reject single lines, or always the whole PR?","Now"],
+  ["Q-12","Is there a difference between return for correction (goes back to the requester) and reject or cancel (PR is closed for good)?","Now"],
+  ["Q-13","Can the requester withdraw or cancel a PR after submitting it?","Now"],
+  ["Q-14","Is there a value or urgency rule that adds an extra approver (for example a GM above a limit)? Do PRs carry estimated prices at all?","Now"],
+  ["Q-15","After approval, what happens in this system: does procurement record the PO number, attach the PO, and mark the PR as ordered, delivered, closed?","Now"],
+  ["Q-16","Urgent requests: do we need an \"urgent\" flag with faster reminders?","Before PRD"],
+  ["Q-17","Reminders and escalation: after how long without action do we remind, and do we escalate to someone?","Before PRD"]]],
+ ["Items and the form",[
+  ["Q-18","Free-text item descriptions, or pick from an item list that grows over time? (An item list now makes the inventory module much easier later.)","Before PRD"],
+  ["Q-19","Fixed list of units managed by the admin, or free text?","Before PRD"],
+  ["Q-20","Attachments on a PR or line (site photos, drawings, specs)? Shown on the PDF?","Before PRD"],
+  ["Q-21","Extra header fields beyond the paper form: required-by date, deliver-to location, notes? (The sample added them.)","Before PRD"],
+  ["Q-22","Maximum lines per PR? The paper form fits about 25; the PDF can run to more pages.","Later"],
+  ["Q-23","Do we add a \"Qty to purchase\" column to the PDF, or keep exactly the six columns of the paper form?","Later"]]],
+ ["Signing, login and security",[
+  ["Q-24","Code rules: proposed 6 digits, valid 10 minutes, 5 wrong tries then a 15-minute lock. OK?","Before PRD"],
+  ["Q-25","If a user has not saved a signature image, block signing, or print their typed name in a signature style?","Before PRD"],
+  ["Q-26","Seal certificate: start with an Almiras self-issued certificate, or buy a document-signing certificate from a licensed Saudi provider from day one?","Before PRD"],
+  ["Q-27","Should the QR verification page be public (anyone with the PDF), or require login? Public shows only PR number, status and signer names.","Before PRD"],
+  ["Q-28","Who drafts the internal e-signature policy text: we draft it for legal review, or legal provides it?","Later"]]],
+ ["Notifications and reporting",[
+  ["Q-29","Email only, or Microsoft Teams messages too?","Before PRD"],
+  ["Q-30","Which reports and lists matter on day one (my requests, waiting for me, all PRs per project, overdue PRs, export to Excel)?","Before PRD"]]],
+ ["Platform and integrations",[
+  ["Q-31","Does the group use an accounting or ERP system today (for example Odoo, SAP Business One, Zoho, Qoyod) that later modules must connect to?","Before PRD"],
+  ["Q-32","Expected scale: number of companies, users, PRs per month?","Before PRD"],
+  ["Q-33","Work from site with weak signal: is saving a draft offline needed, or is online-only acceptable?","Before PRD"],
+  ["Q-34","Domain for the app (for example pr.almiras.sa)?","Later"]]]
+];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const row = r => `<tr><td class="id">${esc(r[0])}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`;
+document.getElementById("decided-rows").innerHTML = DECIDED.map(row).join("");
+document.getElementById("assumption-rows").innerHTML = ASSUMPTIONS.map(row).join("");
+const cls = p => p === "Now" ? "now" : p === "Before PRD" ? "prd" : "";
+const drawQ = f => {
+  document.getElementById("question-groups").innerHTML = QUESTIONS.map(([g, qs]) => {
+    const shown = qs.filter(q => f === "all" || q[2] === f);
+    if (!shown.length) return "";
+    return `<h3>${esc(g)}</h3><div class="scroll"><table><thead><tr><th>ID</th><th>Question</th><th>Priority</th></tr></thead><tbody>${
+      shown.map(q => `<tr><td class="id">${q[0]}</td><td>${esc(q[1])}</td><td><span class="pri ${cls(q[2])}">${q[2]}</span></td></tr>`).join("")}</tbody></table></div>`;
+  }).join("");
+};
+drawQ("all");
+document.getElementById("filters").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  document.querySelectorAll("#filters button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  drawQ(b.dataset.f);
+});
+const all = QUESTIONS.flatMap(g => g[1]);
+document.getElementById("counts").innerHTML = [
+  [DECIDED.length, "decided"], [ASSUMPTIONS.length, "assumptions"], [all.length, "open questions"], [all.filter(q => q[2] === "Now").length, "needed now"]
+].map(([n, l]) => `<div><b>${n}</b><span>${l}</span></div>`).join("");
+}
+</script>
+</body>
+</html>
