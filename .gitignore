@@ -1,5 +1,3 @@
-# Licensed brand fonts (HT Rakik) — keep out of git; copy from the Almiras design system
-prototype/pdf/brand/fonts/
 # Build outputs
 prototype/pdf/sample.pdf
 prototype/pdf/sample.html
