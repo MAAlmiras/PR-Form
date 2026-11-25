@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ pr.number }} · Internal Purchase Request</title>
+<style>
+@font-face{font-family:"HT Rakik";font-weight:400;src:url({{ fonts.rakik_regular }}) format("woff2")}
+@font-face{font-family:"HT Rakik";font-weight:600;src:url({{ fonts.rakik_semibold }}) format("woff2")}
+@font-face{font-family:"Bricolage Grotesque";font-weight:700;src:url({{ fonts.bricolage_bold }}) format("truetype")}
+@page{size:A4;margin:0}
+:root{--navy:#0b2a3c;--sand:#ffeee8;--orange:#df5323;--muted:#5e7580;--rule:#0b2a3c;--hair:#c9d2d6;--accent:{{ company.accent }}}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#fff;color:var(--navy);font:400 9.5pt/1.4 "HT Rakik",system-ui,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{position:relative;width:210mm;height:297mm;padding:11mm 11mm 9mm;page-break-after:always;overflow:hidden;display:flex;flex-direction:column}
+.page:last-child{page-break-after:auto}
+.ar{font-family:"HT Rakik";direction:rtl;unicode-bidi:isolate}
+.wm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:0}
+.wm span{font:700 120pt "Bricolage Grotesque";color:rgba(11,42,60,.045);transform:rotate(-32deg);letter-spacing:.04em}
+.frame{position:relative;z-index:1;border:1.2pt solid var(--rule);display:flex;flex-direction:column;flex:1}
+
+/* header */
+.head{display:grid;grid-template-columns:1fr 78mm;gap:6mm;padding:5mm 5mm 3.5mm}
+.co img{height:20mm;display:block}
+.co .names{margin-top:2.2mm;font-size:8.5pt;color:var(--muted)}
+.co .cr{margin-top:1.6mm;font:600 11pt "HT Rakik";color:var(--accent);letter-spacing:.01em}
+.meta{display:grid;grid-template-columns:auto 1fr;column-gap:3mm;row-gap:1.3mm;align-content:start}
+.meta dt{color:var(--muted);font-size:8.5pt;white-space:nowrap;padding-top:.4mm}
+.meta dd{font-weight:600;border-bottom:.6pt solid var(--hair);padding-bottom:.6mm}
+.status{display:inline-flex;align-items:center;gap:1.6mm;font-weight:600}
+.status i{width:2.2mm;height:2.2mm;border-radius:50%;background:var(--orange);display:inline-block}
+
+.title{display:flex;justify-content:space-between;align-items:baseline;background:var(--sand);border-top:1.2pt solid var(--rule);border-bottom:1.2pt solid var(--rule);padding:2.6mm 5mm}
+.title h1{font:700 17pt/1.1 "Bricolage Grotesque";letter-spacing:-.01em}
+.title .ar{font-weight:600;font-size:14pt}
+
+/* items */
+table{width:100%;border-collapse:collapse}
+.items th{background:var(--sand);font-weight:600;font-size:8.5pt;text-align:center;padding:1.6mm 1.4mm;border-bottom:1.2pt solid var(--rule);border-right:.8pt solid var(--rule);line-height:1.2}
+.items th small{display:block;font-weight:400;font-size:7.5pt;color:var(--muted);margin-top:.4mm}
+.items td{border-bottom:.6pt solid var(--hair);border-right:.8pt solid var(--rule);padding:0 1.8mm;height:7.4mm;font-size:9pt;vertical-align:middle}
+.items th:last-child,.items td:last-child{border-right:0}
+.items td.n{text-align:center;color:var(--muted)}
+.items td.c{text-align:center;font-variant-numeric:tabular-nums;white-space:nowrap}
+.items td.q{text-align:center;font-weight:600;font-variant-numeric:tabular-nums}
+.items td.r{font-size:8pt;color:var(--muted)}
+.items tr.notes td{border-top:1.2pt solid var(--rule);border-bottom:0;height:auto;padding:2mm 1.8mm;font-size:8.5pt}
+.items tr.notes b{font-weight:600;color:var(--navy)}
+
+/* signatures */
+.sigs{display:grid;grid-template-columns:repeat(3,1fr);border-top:1.2pt solid var(--rule);margin-top:auto}
+.sig{padding:2.6mm 4mm 3mm;border-right:.8pt solid var(--rule)}
+.sig:last-child{border-right:0}
+.sig .role{display:flex;justify-content:space-between;align-items:baseline;gap:2mm}
+.sig .step{font-size:7.5pt;color:var(--muted)}
+.sig .rn{font-weight:600;font-size:9pt}
+.sig .role .ar{font-weight:600;font-size:9.5pt}
+.sig .ink{height:17mm;display:flex;align-items:center;border-bottom:.6pt solid var(--hair);margin:1mm 0 1.6mm}
+.sig .ink svg{height:16mm;width:auto;max-width:100%}
+.sig .who{font-weight:600}
+.sig .when,.sig .sid{font-size:7.5pt;color:var(--muted)}
+.sig .sid{font-family:ui-monospace,monospace;font-size:6.8pt;margin-top:.6mm}
+
+/* footer */
+.foot{position:relative;z-index:1;display:grid;grid-template-columns:20mm 1fr auto;gap:4mm;align-items:center;padding-top:3mm}
+.foot .qr svg{width:20mm;height:20mm;display:block}
+.foot p{font-size:7.3pt;color:var(--muted);line-height:1.45}
+.foot p b{color:var(--navy);font-weight:600}
+.foot .hash{font-family:ui-monospace,monospace;font-size:6.5pt;word-break:break-all}
+.foot .issuer{text-align:right;font-size:7pt;color:var(--muted)}
+.foot .issuer img{height:6mm;display:block;margin:0 0 1mm auto}
+
+/* certificate page */
+.cert{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;gap:5mm}
+.cert header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1.2pt solid var(--rule);padding-bottom:3mm}
+.cert h2{font:700 17pt/1.1 "Bricolage Grotesque";letter-spacing:-.01em}
+.cert header .ar{font-weight:600;font-size:13pt}
+.cert h3{font:700 10.5pt "Bricolage Grotesque";margin-bottom:2mm}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:.8pt solid var(--rule)}
+.facts div{padding:2.2mm 3mm;border-right:.6pt solid var(--hair)}
+.facts div:last-child{border-right:0}
+.facts dt{font-size:7.5pt;color:var(--muted)}
+.facts dd{font-weight:600;font-size:9pt}
+.grid th{background:var(--sand);text-align:left;font-weight:600;font-size:8pt;padding:1.6mm 2mm;border-bottom:1pt solid var(--rule)}
+.grid td{padding:1.8mm 2mm;border-bottom:.6pt solid var(--hair);font-size:8.3pt;vertical-align:top}
+.grid td.t{white-space:nowrap;color:var(--muted);font-variant-numeric:tabular-nums}
+.grid td.m{font-family:ui-monospace,monospace;font-size:7pt}
+.seal{display:grid;grid-template-columns:1fr 1fr;gap:4mm}
+.seal .box{background:var(--sand);padding:3mm 4mm}
+.seal .box p{font-size:8.3pt;line-height:1.5}
+.seal .box .m{font-family:ui-monospace,monospace;font-size:7pt;word-break:break-all}
+.legal{font-size:7.6pt;color:var(--muted);line-height:1.5;margin-top:auto}
+</style>
+</head>
+<body>
+
+<!-- Page 1: the form -->
+<section class="page">
+  {% if sample %}<div class="wm"><span>SAMPLE</span></div>{% endif %}
+  <div class="frame">
+    <div class="head">
+      <div class="co">
+        <img src="{{ company.logo_src }}" alt="{{ company.name_en }}">
+        {% if company.show_name %}<div class="names">{{ company.name_en }} · <span class="ar">{{ company.name_ar }}</span></div>{% endif %}
+        <div class="cr">CR # {{ company.cr_number }}</div>
+      </div>
+      <dl class="meta">
+        <dt>Project name</dt><dd>{{ pr.project_name }}</dd>
+        <dt>Project no.</dt><dd>{{ pr.project_number }}</dd>
+        <dt>Date</dt><dd>{{ pr.date }}</dd>
+        <dt>No.</dt><dd>{{ pr.number }} · Rev {{ pr["revision"] }}</dd>
+        <dt>Required by</dt><dd>{{ pr.required_by }}</dd>
+        <dt>Status</dt><dd><span class="status"><i></i>{{ pr.status }} · <span class="ar">{{ pr.status_ar }}</span></span></dd>
+      </dl>
+    </div>
+
+    <div class="title">
+      <h1>Internal Purchase Request</h1>
+      <span class="ar">طلب شراء داخلي</span>
+    </div>
+
+    <table class="items">
+      <colgroup><col style="width:7%"><col style="width:37%"><col style="width:9%"><col style="width:9%"><col style="width:13%"><col style="width:25%"></colgroup>
+      <thead><tr>
+        <th>No<small class="ar">م</small></th>
+        <th>Item description<small class="ar">وصف الصنف</small></th>
+        <th>Unit<small class="ar">الوحدة</small></th>
+        <th>Qty<small class="ar">الكمية</small></th>
+        <th>Available in store<small class="ar">المتوفر بالمخزن</small></th>
+        <th>Remarks<small class="ar">ملاحظات</small></th>
+      </tr></thead>
+      <tbody>
+      {% for it in pr["items"] %}
+        <tr><td class="n">{{ loop.index }}</td><td>{{ it.desc }}</td><td class="c">{{ it.unit }}</td><td class="q">{{ "{:,}".format(it.qty) }}</td><td class="c">{{ "{:,}".format(it.avail) }}</td><td class="r">{{ it.remarks }}</td></tr>
+      {% endfor %}
+      {% for _ in range(filler_rows) %}
+        <tr><td class="n"></td><td></td><td></td><td></td><td></td><td></td></tr>
+      {% endfor %}
+        <tr class="notes"><td colspan="6"><b>Deliver to:</b> {{ pr.deliver_to }} &nbsp;·&nbsp; <b>Notes:</b> {{ pr.notes }}</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sigs">
+      {% for s in signers %}
+      <div class="sig">
+        <div class="role"><span class="step">{{ s.step }}</span><span class="ar">{{ s.role_ar }}</span></div>
+        <div class="rn">{{ s.role }}</div>
+        <div class="ink">{{ s.svg | safe }}</div>
+        <div class="who">{{ s.name }}</div>
+        <div class="when">Signed {{ s.signed_at }} (Riyadh) · email code verified</div>
+        <div class="sid">ID {{ s.sig_id }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="qr">{{ qr_svg | safe }}</div>
+    <p><b>Signed electronically and sealed.</b> Each signature was confirmed with a one-time code sent to the signer's Microsoft 365 email. Any change to this file after sealing breaks the digital seal. Scan or visit <b>{{ verify_url }}</b> to verify.<br><span class="hash">Content SHA-256 {{ content_hash }}</span></p>
+    <div class="issuer"><img src="{{ issuer.logo_src }}" alt="{{ issuer.name }}">Page 1 of 2</div>
+  </div>
+</section>
+
+<!-- Page 2: signature certificate -->
+<section class="page">
+  {% if sample %}<div class="wm"><span>SAMPLE</span></div>{% endif %}
+  <div class="cert">
+    <header>
+      <div>
+        <h2>Signature certificate</h2>
+        <div style="color:var(--muted);margin-top:1mm">{{ pr.number }} · Rev {{ pr["revision"] }} · {{ company.name_en }}</div>
+      </div>
+      <span class="ar">شهادة التوقيع</span>
+    </header>
+
+    <dl class="facts">
+      <div><dt>Status</dt><dd>{{ pr.status }}</dd></div>
+      <div><dt>Signatures</dt><dd>{{ signers|length }} of {{ signers|length }}</dd></div>
+      <div><dt>Sealed</dt><dd>{{ sealed_at }}</dd></div>
+      <div><dt>Items</dt><dd>{{ pr["items"]|length }}</dd></div>
+    </dl>
+
+    <div>
+      <h3>Signers</h3>
+      <table class="grid">
+        <thead><tr><th>Role</th><th>Name and account</th><th>Signed (Riyadh)</th><th>Verification</th><th>Device and IP</th><th>Signature ID</th></tr></thead>
+        <tbody>
+        {% for s in signers %}
+          <tr><td>{{ s.role }}</td><td><b>{{ s.name }}</b><br>{{ s.email_masked }}</td><td class="t">{{ s.signed_at }}</td><td>Microsoft 365 sign-in<br>Email code</td><td>{{ s.device }}<br>{{ s.ip }}</td><td class="m">{{ s.sig_id }}</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <h3>Activity history</h3>
+      <table class="grid">
+        <thead><tr><th style="width:26%">Time (Riyadh)</th><th style="width:20%">By</th><th>Action</th></tr></thead>
+        <tbody>
+        {% for h in history %}
+          <tr><td class="t">{{ h.at }}</td><td>{{ h.who }}</td><td>{{ h.what }}</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="seal">
+      <div class="box">
+        <h3>Content fingerprint</h3>
+        <p>Every signer approved this exact content. Changing any item, quantity or remark changes the fingerprint and voids the signatures.</p>
+        <p class="m" style="margin-top:1.5mm">SHA-256 {{ content_hash }}</p>
+      </div>
+      <div class="box">
+        <h3>Digital seal</h3>
+        <p>This PDF carries a PAdES digital seal from <b>{{ seal_cn }}</b> with a trusted RFC 3161 timestamp. Open it in Adobe Acrobat Reader to see the seal and confirm the file is unchanged.</p>
+      </div>
+    </div>
+
+    <p class="legal">Signed under the {{ company.name_en }} electronic signature policy, which adopts this system as the agreed method for approving internal purchase requests, in line with the Saudi Electronic Transactions Law and the Evidence Law. This page is part of the document and is covered by the seal.</p>
+  </div>
+  <div class="foot">
+    <div class="qr">{{ qr_svg | safe }}</div>
+    <p>Verify at <b>{{ verify_url }}</b></p>
+    <div class="issuer"><img src="{{ issuer.logo_src }}" alt="{{ issuer.name }}">Page 2 of 2</div>
+  </div>
+</section>
+</body>
+</html>

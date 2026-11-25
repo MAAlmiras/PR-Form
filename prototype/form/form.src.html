@@ -1,0 +1,339 @@
+<title>Purchase Request Form</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* VOICE work: an internal tool for site managers, store keepers and procurement
+   IDEA the company's paper PR form turned into a phone-first flow: fill, sign with an email code, pass on
+   PICTURE the live form itself: item cards, the store check, and the sign sheet with the drawn signature
+   COLOUR Almiras navy bar and ink, sand panels, white ground, orange only for status dots and the step marker
+   TYPE Bricolage Grotesque Bold for titles + HT Rakik for everything else
+   LAYOUT one app column up to 560px centred under a navy bar with role tabs; phone is the primary composition */
+@font-face{font-family:"HT Rakik";font-weight:400;src:url(__RAKIK400__) format("woff2")}
+@font-face{font-family:"HT Rakik";font-weight:600;src:url(__RAKIK600__) format("woff2")}
+@font-face{font-family:"Bricolage Grotesque";font-weight:700;src:url(__BRIC700__) format("truetype")}
+:root{color-scheme:light dark;
+--bg:light-dark(#ffffff,#0b2a3c);--panel:light-dark(#ffeee8,#081c26);--ink:light-dark(#0b2a3c,#ffeee8);--muted:light-dark(#5e7580,#a7b4b9);
+--line:light-dark(#d7dfe2,#23485c);--field:light-dark(#ffffff,#0b2a3c);--bar:#0b2a3c;--bar2:light-dark(#0b2a3c,#030f17);
+--btn:light-dark(#0b2a3c,#ffeee8);--btn-ink:light-dark(#ffeee8,#0b2a3c);--accent:#df5323;--warn:light-dark(#9b3317,#efa78b);--ok:light-dark(#0b2a3c,#ffeee8)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 "HT Rakik",system-ui,sans-serif;overflow-x:clip}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{font-family:"Bricolage Grotesque","HT Rakik",sans-serif;font-weight:700;letter-spacing:-.02em;line-height:1.1;margin:0}
+.top{background:var(--bar2);color:#ffeee8;margin-top:calc(-1*env(safe-area-inset-top,0px));padding:calc(env(safe-area-inset-top,0px) + 14px) max(5vw,16px,env(safe-area-inset-right,0px)) 0 max(5vw,16px,env(safe-area-inset-left,0px))}
+.top .in{max-width:560px;margin:0 auto}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand img{height:26px;display:block}
+.me{display:flex;align-items:center;gap:8px;font-size:14px;color:#a7b4b9}
+.me b{width:32px;height:32px;border-radius:50%;background:#ffeee8;color:#0b2a3c;display:grid;place-items:center;font-size:13px;font-weight:600}
+.tabs{display:flex;gap:4px;margin-top:14px;overflow-x:auto;scrollbar-width:none}
+.tabs button{flex:0 0 auto;border:0;background:none;color:#a7b4b9;padding:10px 12px 12px;font-weight:600;font-size:15px;border-radius:10px 10px 0 0;cursor:pointer;min-height:44px}
+.tabs button[aria-selected=true]{background:var(--bg);color:var(--ink)}
+.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+main{padding:20px max(5vw,16px,env(safe-area-inset-right,0px)) 120px max(5vw,16px,env(safe-area-inset-left,0px))}
+.col{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.head h1{font-size:30px}
+.head .no{color:var(--muted);font-size:14px;white-space:nowrap}
+.panel{background:var(--panel);border-radius:14px;padding:16px}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:14px;font-weight:600}
+.in-f{width:100%;min-height:46px;border:1px solid var(--line);background:var(--field);border-radius:10px;padding:10px 12px;font-size:16px;font-weight:400}
+.in-f:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+.sec{display:flex;justify-content:space-between;align-items:baseline}
+.sec h2{font-size:20px}
+.sec span{color:var(--muted);font-size:14px}
+.item{border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:12px;background:var(--bg)}
+.item .row1{display:flex;gap:10px;align-items:center;justify-content:space-between}.item .row1 b{font-size:15px}
+.num{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--panel);font-size:13px;font-weight:600;margin-right:8px}
+.del{flex:0 0 44px;height:44px;border:0;background:none;border-radius:10px;cursor:pointer;color:var(--muted);display:grid;place-items:center}
+.del:hover{background:var(--panel)}
+.units{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.units button{flex:0 0 auto;border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:6px 14px;min-height:36px;font-size:14px;cursor:pointer}
+.units button[aria-pressed=true]{background:var(--btn);color:var(--btn-ink);border-color:var(--btn);font-weight:600}
+.qrow{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.step{display:flex;align-items:center;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.step button{width:46px;height:46px;border:0;background:var(--panel);font-size:22px;cursor:pointer}
+.step input{width:76px;height:46px;border:0;text-align:center;font-size:18px;font-weight:600;background:var(--field);font-variant-numeric:tabular-nums}
+.step input:focus{outline:2px solid var(--accent);outline-offset:-2px}
+.link{border:0;background:none;color:var(--ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:10px 0;font-size:15px}
+.add{border:1px solid var(--line);background:var(--panel);border-radius:14px;min-height:54px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--bg);border-top:1px solid var(--line);padding:12px max(5vw,16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(5vw,16px,env(safe-area-inset-left,0px));z-index:5}
+.bar .in{max-width:560px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.bar .sum{flex:1;font-size:14px;color:var(--muted)}
+.bar .sum b{display:block;color:var(--ink);font-size:16px}
+.btn{border:0;background:var(--btn);color:var(--btn-ink);border-radius:12px;min-height:50px;padding:0 20px;font-weight:600;font-size:16px;cursor:pointer;white-space:nowrap}
+.btn.ghost{background:none;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn:focus-visible,.add:focus-visible,.units button:focus-visible,.step button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* timeline */
+.tl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.tl div{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted)}
+.tl i{height:6px;border-radius:3px;background:var(--line)}
+.tl .done i{background:var(--ink)}.tl .done{color:var(--ink)}
+.tl .now i{background:var(--accent)}.tl .now{color:var(--ink);font-weight:600}
+/* lists */
+.req{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--bg);cursor:pointer;text-align:left;width:100%}
+.req[aria-current=true]{border-color:var(--ink);border-width:2px;padding:13px}
+.req>span:first-child{flex:1 1 auto;min-width:0}.req b{display:block}
+.req small{color:var(--muted);font-size:14px}
+.dot{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;font-size:14px;white-space:nowrap}
+.dot::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.sline{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.sline:first-of-type{border-top:0}
+.sline .d b{display:block;font-weight:600}
+.sline .d small{color:var(--muted);font-size:14px}
+.av{display:flex;align-items:center;gap:6px}
+.av input{width:72px;height:44px;border:1px solid var(--line);border-radius:10px;text-align:center;font-size:17px;font-weight:600;background:var(--field)}
+.av input:focus{outline:2px solid var(--accent);border-color:transparent}
+.chip{border:1px solid var(--line);background:var(--bg);border-radius:999px;min-height:36px;padding:0 12px;font-size:14px;cursor:pointer}
+.tobuy{font-size:13px;color:var(--muted);white-space:nowrap}
+.tobuy.zero{color:var(--warn);font-weight:600}
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(3,15,23,.55);z-index:10;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--bg);width:100%;max-width:560px;border-radius:20px 20px 0 0;padding:20px max(20px,env(safe-area-inset-left,0px)) calc(20px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:16px;max-height:92svh;overflow:auto}
+@media(min-width:640px){.scrim{align-items:center}.sheet{border-radius:20px}}
+.sheet h2{font-size:24px}
+.sigbox{background:var(--panel);border-radius:14px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.sigbox img{height:58px;max-width:60%;object-fit:contain}
+.sigbox small{color:var(--muted);font-size:14px;text-align:right}
+.otp{display:flex;gap:8px;justify-content:space-between}
+.otp input{width:100%;max-width:52px;height:58px;text-align:center;font-size:24px;font-weight:600;border:1px solid var(--line);border-radius:12px;background:var(--field);font-variant-numeric:tabular-nums}
+.otp input:focus{outline:2px solid var(--accent);border-color:transparent}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:15px}
+.check input{width:22px;height:22px;margin:1px 0 0;accent-color:#0b2a3c;flex:0 0 22px}
+.muted{color:var(--muted);font-size:14px;margin:0}
+.done-mark{width:56px;height:56px;border-radius:50%;background:var(--btn);color:var(--btn-ink);display:grid;place-items:center}
+/* signature pad */
+.pad{position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;height:200px;touch-action:none}
+.pad canvas{position:absolute;inset:0;width:100%;height:100%;border-radius:14px;cursor:crosshair}
+.pad .base{position:absolute;left:24px;right:24px;bottom:48px;border-bottom:1px solid #c9d2d6;pointer-events:none}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 16px;font-size:15px}
+.kv dt{color:var(--muted)}.kv dd{margin:0;font-weight:600}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--btn);color:var(--btn-ink);padding:12px 18px;border-radius:12px;font-weight:600;z-index:20;max-width:calc(100% - 32px)}
+.note{font-size:13px;color:var(--muted);text-align:center}
+@media(max-width:420px){.head h1{font-size:26px}.grid2{grid-template-columns:minmax(0,1fr)}.bar .btn{padding:0 16px}}
+@media(prefers-reduced-motion:no-preference){.sheet{animation:up .22s ease-out}@keyframes up{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}}
+</style>
+
+<header class="top"><div class="in">
+  <div class="brand"><img src="__LOGO_WHITE__" alt="Almiras"><div class="me" id="me"></div></div>
+  <nav class="tabs" role="tablist" id="tabs">
+    <button role="tab" data-v="new" aria-selected="true">Request</button>
+    <button role="tab" data-v="store" aria-selected="false">Store</button>
+    <button role="tab" data-v="proc" aria-selected="false">Procurement</button>
+    <button role="tab" data-v="sig" aria-selected="false">Signature</button>
+  </nav>
+</div></header>
+
+<main><div class="col" id="view"></div></main>
+<div class="bar" id="bar" hidden><div class="in" id="barin"></div></div>
+<div id="layer"></div>
+
+<script>
+{
+const SIG0 = "__SIG__";
+const UNITS = ["Bag","Pcs","Ton","m","m²","m³","Roll","Sheet","Kg","L","Set","Box","Length"];
+const CATALOG = ["Ordinary Portland cement, 50 kg bag","Deformed steel rebar Ø12 mm, grade 60, 12 m","Deformed steel rebar Ø16 mm, grade 60, 12 m","Annealed binding wire 1.6 mm, 20 kg roll","Shuttering plywood 18 mm, 1220 × 2440 mm","Timber 2\" × 4\", 4 m length","PVC pipe 110 mm SDR 41, 6 m","Bituminous waterproofing membrane 4 mm","Concrete cover spacers 40 mm","Common wire nails 3\"","Safety helmet, white, EN 397","Ready-mix concrete C35"];
+const USERS = {
+  new:{name:"Khalid Al-Harbi",ini:"KH",mail:"k•••••@lizam•••.sa",role:"Project manager"},
+  store:{name:"Faisal Al-Otaibi",ini:"FO",mail:"f•••••@lizam•••.sa",role:"Store manager"},
+  proc:{name:"Omar Al-Shehri",ini:"OS",mail:"o•••••@lizam•••.sa",role:"Procurement"},
+  sig:{name:"Khalid Al-Harbi",ini:"KH",mail:"k•••••@lizam•••.sa",role:"Project manager"}
+};
+const PROJECTS = [["LZ-P-24017","Al Narjis Residential Villas, Phase 2"],["LZ-P-24022","King Salman Road warehouse fit-out"],["LZ-P-25003","Al Malqa school extension"]];
+const S = {
+  view:"new", sig:SIG0, signedNew:false,
+  draft:{project:"LZ-P-24017", needBy:"2026-12-03", deliver:"Site store, Al Narjis", notes:"",
+    items:[{d:"Ordinary Portland cement, 50 kg bag",u:"Bag",q:400,r:"Deliver in two batches",showR:true},{d:"Deformed steel rebar Ø16 mm, grade 60, 12 m",u:"Ton",q:6,r:"",showR:false},{d:"Shuttering plywood 18 mm, 1220 × 2440 mm",u:"Sheet",q:150,r:"",showR:false}]},
+  inbox:[
+    {no:"LZ-PR-2026-0149",proj:"Al Narjis Residential Villas, Phase 2",by:"Khalid Al-Harbi",when:"Today, 09:12",need:"3 Dec",
+     items:[{d:"Ordinary Portland cement, 50 kg bag",u:"Bag",q:400,a:""},{d:"Deformed steel rebar Ø16 mm, grade 60, 12 m",u:"Ton",q:6,a:""},{d:"Annealed binding wire 1.6 mm, 20 kg roll",u:"Roll",q:30,a:""},{d:"Shuttering plywood 18 mm, 1220 × 2440 mm",u:"Sheet",q:150,a:""},{d:"PVC pipe 110 mm SDR 41, 6 m",u:"Length",q:60,a:""}]},
+    {no:"LZ-PR-2026-0150",proj:"Al Malqa school extension",by:"Sara Al-Dosari",when:"Today, 10:30",need:"8 Dec",
+     items:[{d:"Ready-mix concrete C35",u:"m³",q:48,a:""},{d:"Concrete cover spacers 40 mm",u:"Pcs",q:1500,a:""}]}
+  ],
+  sel:0, storeDone:{},
+  proc:{no:"LZ-PR-2026-0147",proj:"Al Narjis Residential Villas, Phase 2",by:"Khalid Al-Harbi",store:"Faisal Al-Otaibi",approved:false,
+    items:[["Ordinary Portland cement, 50 kg bag","Bag",400,120],["Deformed steel rebar Ø16 mm, grade 60, 12 m","Ton",6,2],["Annealed binding wire 1.6 mm, 20 kg roll","Roll",30,0],["Shuttering plywood 18 mm, 1220 × 2440 mm","Sheet",150,40],["Timber 2\" × 4\", 4 m length","Pcs",300,0],["PVC pipe 110 mm SDR 41, 6 m","Length",60,12]]}
+};
+const $ = s => document.querySelector(s);
+const esc = v => String(v).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = n => Number(n).toLocaleString("en-US");
+const icon = {
+  trash:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>',
+  plus:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  check:'<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
+};
+
+function timeline(stage){
+  const st=["Requester","Store check","Procurement","Approved"];
+  return `<div class="tl" aria-label="Approval progress">${st.map((s,i)=>`<div class="${i<stage?'done':i===stage?'now':''}"><i></i>${s}</div>`).join("")}</div>`;
+}
+function setBar(html){const b=$("#bar");if(!html){b.hidden=true;return}b.hidden=false;$("#barin").innerHTML=html}
+function toast(t){const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2600)}
+
+/* ---------- requester ---------- */
+function vNew(){
+  const d=S.draft;
+  if(S.signedNew){
+    $("#view").innerHTML=`<div class="head"><h1>Request sent</h1><span class="no">LZ-PR-2026-0151</span></div>
+      ${timeline(1)}
+      <div class="panel" style="display:flex;gap:14px;align-items:center"><div class="done-mark">${icon.check}</div><div><b>Signed and sent to the store manager</b><p class="muted">Faisal Al-Otaibi will check stock. You get an email when it moves on or comes back.</p></div></div>
+      <dl class="kv panel"><dt>Project</dt><dd>${esc(PROJECTS.find(p=>p[0]===d.project)[1])}</dd><dt>Items</dt><dd>${d.items.length}</dd><dt>Required by</dt><dd>${esc(d.needBy)}</dd><dt>Signed</dt><dd>Today, ${new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})}</dd></dl>
+      <button class="btn ghost" id="again">Start another request</button>`;
+    setBar("");$("#again").onclick=()=>{S.signedNew=false;S.draft.items=[{d:"",u:"Pcs",q:1,r:"",showR:false}];render()};return;
+  }
+  $("#view").innerHTML=`<div class="head"><h1>New purchase request</h1><span class="no">Draft</span></div>
+    <div class="panel" style="display:flex;flex-direction:column;gap:12px">
+      <label class="f">Project<select class="in-f" id="proj">${PROJECTS.map(p=>`<option value="${p[0]}" ${p[0]===d.project?"selected":""}>${esc(p[1])} · ${p[0]}</option>`).join("")}</select></label>
+      <div class="grid2"><label class="f">Required by<input class="in-f" type="date" id="need" value="${esc(d.needBy)}"></label>
+      <label class="f">Deliver to<input class="in-f" id="deliver" value="${esc(d.deliver)}"></label></div>
+    </div>
+    <div class="sec"><h2>Items</h2><span>${d.items.length} ${d.items.length===1?"item":"items"}</span></div>
+    <datalist id="cat">${CATALOG.map(c=>`<option value="${esc(c)}">`).join("")}</datalist>
+    <div id="items" style="display:flex;flex-direction:column;gap:12px">${d.items.map(itemCard).join("")}</div>
+    <button class="add" id="add">${icon.plus}Add item</button>
+    <label class="f">Notes for store and procurement<textarea class="in-f" id="notes" rows="2" placeholder="Optional">${esc(d.notes)}</textarea></label>`;
+  setBar(`<div class="sum"><b>${d.items.length} ${d.items.length===1?"item":"items"}</b>Next: store check</div><button class="btn" id="submit">Sign and submit</button>`);
+  $("#proj").onchange=e=>d.project=e.target.value;
+  $("#need").onchange=e=>d.needBy=e.target.value;
+  $("#deliver").oninput=e=>d.deliver=e.target.value;
+  $("#notes").oninput=e=>d.notes=e.target.value;
+  $("#add").onclick=()=>{d.items.push({d:"",u:"Pcs",q:1,r:"",showR:false});render();const ins=document.querySelectorAll("[data-f=d]");ins[ins.length-1].focus()};
+  $("#items").addEventListener("click",e=>{
+    const b=e.target.closest("button");if(!b)return;const i=+b.closest(".item").dataset.i,it=d.items[i];
+    if(b.dataset.u){it.u=b.dataset.u}
+    else if(b.dataset.a==="dec"){it.q=Math.max(1,(+it.q||1)-1)}
+    else if(b.dataset.a==="inc"){it.q=(+it.q||0)+1}
+    else if(b.dataset.a==="del"){if(d.items.length>1)d.items.splice(i,1);else toast("A request needs at least one item")}
+    else if(b.dataset.a==="rem"){it.showR=true}
+    render();
+  });
+  $("#items").addEventListener("input",e=>{const f=e.target.dataset.f;if(!f)return;const it=d.items[+e.target.closest(".item").dataset.i];it[f]=f==="q"?e.target.value.replace(/\D/g,""):e.target.value});
+  $("#submit").onclick=()=>{
+    const bad=d.items.findIndex(it=>!it.d.trim()||!(+it.q>0));
+    if(bad>-1){toast(`Item ${bad+1} needs a description and quantity`);document.querySelectorAll(".item")[bad].querySelector("input").focus();return}
+    signSheet({title:"Sign and submit",doc:"LZ-PR-2026-0151",summary:`${d.items.length} items · ${PROJECTS.find(p=>p[0]===d.project)[1]}`,statement:"I confirm this request lists materials the project needs.",user:USERS.new,done:()=>{S.signedNew=true;render()}});
+  };
+}
+function itemCard(it,i){
+  return `<div class="item" data-i="${i}">
+    <div class="row1"><b><span class="num">${i+1}</span>Item ${i+1}</b>
+      <button class="del" data-a="del" aria-label="Remove item ${i+1}">${icon.trash}</button></div>
+    <input class="in-f" list="cat" data-f="d" value="${esc(it.d)}" placeholder="What do you need?" aria-label="Item ${i+1} description" style="margin-top:-8px">
+    <div class="units" role="group" aria-label="Unit">${UNITS.map(u=>`<button data-u="${u}" aria-pressed="${u===it.u}">${u}</button>`).join("")}</div>
+    <div class="qrow"><div class="step"><button data-a="dec" aria-label="Decrease">−</button><input inputmode="numeric" data-f="q" value="${esc(it.q)}" aria-label="Quantity"><button data-a="inc" aria-label="Increase">+</button></div>
+    ${it.showR?"":`<button class="link" data-a="rem">Add remark</button>`}</div>
+    ${it.showR?`<input class="in-f" data-f="r" value="${esc(it.r)}" placeholder="Remark" aria-label="Remark for item ${i+1}">`:""}
+  </div>`;
+}
+
+/* ---------- store ---------- */
+function vStore(){
+  const r=S.inbox[S.sel], done=S.storeDone[r.no];
+  $("#view").innerHTML=`<div class="head"><h1>Store check</h1><span class="no">${S.inbox.filter(x=>!S.storeDone[x.no]).length} waiting</span></div>
+    <div style="display:flex;flex-direction:column;gap:8px">${S.inbox.map((x,i)=>`<button class="req" data-i="${i}" aria-current="${i===S.sel}"><span><b>${x.no}</b><small>${esc(x.proj)} · ${esc(x.by)}</small></span>${S.storeDone[x.no]?`<span class="dot" style="--accent:var(--ink)">${S.storeDone[x.no]}</span>`:`<span class="dot">Needs check</span>`}</button>`).join("")}</div>
+    ${timeline(done==="Sent on"?2:1)}
+    <div class="panel"><div class="sec" style="margin-bottom:4px"><h2>${r.no}</h2><span>Needed ${r.need}</span></div><p class="muted">${esc(r.proj)} · from ${esc(r.by)}, ${r.when}</p></div>
+    <div class="sec"><h2>Available in store</h2><button class="chip" id="none">None in stock</button></div>
+    <div id="lines">${r.items.map((it,i)=>{const a=it.a===""?null:+it.a,buy=a===null?null:Math.max(0,it.q-a);return `<div class="sline" data-i="${i}"><div class="d"><b>${esc(it.d)}</b><small>Requested ${fmt(it.q)} ${esc(it.u)}${buy===null?"":` · <span class="tobuy ${buy===0?"zero":""}">${buy===0?"fully in stock":"to buy "+fmt(buy)}</span>`}</small></div>
+      <div class="av"><input inputmode="numeric" value="${esc(it.a)}" placeholder="–" aria-label="Available in store for ${esc(it.d)}"><button class="chip" data-all>All</button></div></div>`}).join("")}</div>`;
+  const filled=r.items.every(it=>it.a!=="");
+  setBar(done?`<div class="sum"><b>${done}</b>${done==="Sent on"?"Waiting for procurement":"Back with the requester"}</div>`:`<button class="btn ghost" id="ret">Return</button><div class="sum" style="text-align:right">${r.items.filter(it=>it.a!=="").length} of ${r.items.length} lines</div><button class="btn" id="ok" ${filled?"":"disabled"}>Sign and send</button>`);
+  document.querySelectorAll(".req").forEach(b=>b.onclick=()=>{S.sel=+b.dataset.i;render()});
+  $("#none").onclick=()=>{r.items.forEach(it=>it.a="0");render()};
+  $("#lines").addEventListener("change",e=>{if(e.target.tagName!=="INPUT")return;const it=r.items[+e.target.closest(".sline").dataset.i];it.a=e.target.value.replace(/\D/g,"");render()});
+  $("#lines").addEventListener("click",e=>{if(!e.target.matches("[data-all]"))return;const it=r.items[+e.target.closest(".sline").dataset.i];it.a=String(it.q);render()});
+  if(done)return;
+  $("#ret").onclick=()=>returnSheet(r.no,()=>{S.storeDone[r.no]="Returned";render()});
+  $("#ok").onclick=()=>signSheet({title:"Sign stock check",doc:r.no,summary:`${r.items.length} lines checked · ${esc(r.proj)}`,statement:"I confirm the quantities available in store are correct.",user:USERS.store,done:()=>{S.storeDone[r.no]="Sent on";render()}});
+}
+
+/* ---------- procurement ---------- */
+function vProc(){
+  const p=S.proc;
+  $("#view").innerHTML=`<div class="head"><h1>Procurement</h1><span class="no">${p.approved?"0":"1"} waiting</span></div>
+    ${timeline(p.approved?4:2)}
+    <div class="panel"><div class="sec" style="margin-bottom:4px"><h2>${p.no}</h2><span>Rev 2</span></div><p class="muted">${esc(p.proj)} · requested by ${esc(p.by)} · stock checked by ${esc(p.store)}</p></div>
+    <div>${p.items.map(([d,u,q,a])=>{const buy=Math.max(0,q-a);return `<div class="sline"><div class="d"><b>${esc(d)}</b><small>${fmt(q)} ${u} requested · ${fmt(a)} in store</small></div><div style="text-align:right"><b style="font-size:18px">${fmt(buy)}</b><br><small class="muted">to buy</small></div></div>`}).join("")}</div>
+    ${p.approved?`<div class="panel" style="display:flex;gap:14px;align-items:center"><div class="done-mark">${icon.check}</div><div><b>Approved and sealed</b><p class="muted">The signed PDF is attached to the request and emailed to everyone on it.</p></div></div>
+    <label class="f">PO number<input class="in-f" placeholder="Add once the PO is raised"></label>`:""}`;
+  setBar(p.approved?`<div class="sum"><b>Approved</b>Signed by all three</div><button class="btn ghost" id="pdf">Download PDF</button>`:`<button class="btn ghost" id="ret">Return</button><div class="sum"></div><button class="btn" id="ok">Approve and sign</button>`);
+  if(p.approved){$("#pdf").onclick=()=>toast("In the app this downloads the sealed PDF");return}
+  $("#ret").onclick=()=>returnSheet(p.no,()=>toast("Returned to Khalid Al-Harbi"));
+  $("#ok").onclick=()=>signSheet({title:"Approve request",doc:p.no,summary:`${p.items.length} items · ${esc(p.proj)}`,statement:"I approve this request for purchase.",user:USERS.proc,done:()=>{p.approved=true;render()}});
+}
+
+/* ---------- my signature ---------- */
+function vSig(){
+  $("#view").innerHTML=`<div class="head"><h1>My signature</h1></div>
+    <div class="sigbox"><img id="cur" src="${S.sig}" alt="Current signature"><small>Shown on every PDF you sign</small></div>
+    <div class="sec"><h2>Draw a new one</h2></div>
+    <div class="pad"><div class="base"></div><canvas id="pad" aria-label="Signature pad"></canvas></div>
+    <div class="row"><button class="btn ghost" id="clr">Clear</button><label class="btn ghost" style="display:inline-flex;align-items:center">Upload image<input type="file" accept="image/png,image/jpeg" id="up" hidden></label><button class="btn" id="save" style="margin-left:auto">Save signature</button></div>
+    <dl class="kv panel"><dt>Name</dt><dd>${USERS.sig.name}</dd><dt>Role</dt><dd>Project manager, Lizam Construction</dd><dt>Codes sent to</dt><dd>${USERS.sig.mail}</dd></dl>`;
+  setBar("");
+  const c=$("#pad"),ctx=c.getContext("2d");let drawing=false,dirty=false,last=null;
+  const size=()=>{const r=c.getBoundingClientRect(),k=devicePixelRatio||1;c.width=r.width*k;c.height=r.height*k;ctx.setTransform(k,0,0,k,0,0);ctx.lineWidth=2.6;ctx.lineCap="round";ctx.lineJoin="round";ctx.strokeStyle="#1c2f6e"};
+  size();const ro=new ResizeObserver(()=>{if(!dirty)size()});ro.observe(c);
+  const pt=e=>{const r=c.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top]};
+  c.onpointerdown=e=>{drawing=true;dirty=true;last=pt(e);c.setPointerCapture(e.pointerId)};
+  c.onpointermove=e=>{if(!drawing)return;const p=pt(e);ctx.beginPath();ctx.moveTo(...last);ctx.quadraticCurveTo(last[0],last[1],(last[0]+p[0])/2,(last[1]+p[1])/2);ctx.lineTo(...p);ctx.stroke();last=p};
+  c.onpointerup=c.onpointercancel=()=>drawing=false;
+  $("#clr").onclick=()=>{ctx.clearRect(0,0,c.width,c.height);dirty=false};
+  $("#save").onclick=()=>{if(!dirty){toast("Draw your signature first");return}S.sig=c.toDataURL("image/png");$("#cur").src=S.sig;toast("Signature saved")};
+  $("#up").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{S.sig=r.result;$("#cur").src=S.sig;toast("Signature saved")};r.readAsDataURL(f)};
+}
+
+/* ---------- sheets ---------- */
+function close(){$("#layer").innerHTML=""}
+function signSheet(o){
+  $("#layer").innerHTML=`<div class="scrim" id="scrim"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="st">
+    <div class="sec"><h2 id="st">${o.title}</h2><span>${o.doc}</span></div>
+    <p class="muted" style="margin-top:-8px">${o.summary}</p>
+    <div class="sigbox"><img src="${S.sig}" alt="Your signature"><small>${o.user.name}<br>${o.user.role}</small></div>
+    <label class="check"><input type="checkbox" id="agree">${o.statement}</label>
+    <div><p class="muted" style="margin-bottom:8px">Enter the 6-digit code sent to ${o.user.mail}</p>
+    <div class="otp" id="otp">${[0,1,2,3,4,5].map(i=>`<input inputmode="numeric" maxlength="1" autocomplete="${i?"off":"one-time-code"}" aria-label="Digit ${i+1}">`).join("")}</div>
+    <p class="muted" style="margin-top:8px" id="cd">Code expires in 10:00 · <button class="link" id="resend" style="padding:0" disabled>Resend</button></p></div>
+    <div class="row"><button class="btn ghost" id="cancel">Cancel</button><button class="btn" id="go" style="flex:1" disabled>Sign</button></div>
+    <p class="note">Sample: any 6 digits work</p>
+  </div></div>`;
+  const boxes=[...document.querySelectorAll("#otp input")],go=$("#go"),agree=$("#agree");
+  const ready=()=>go.disabled=!(agree.checked&&boxes.every(b=>/\d/.test(b.value)));
+  boxes.forEach((b,i)=>{
+    b.oninput=()=>{b.value=b.value.replace(/\D/g,"").slice(-1);if(b.value&&i<5)boxes[i+1].focus();ready()};
+    b.onkeydown=e=>{if(e.key==="Backspace"&&!b.value&&i)boxes[i-1].focus()};
+    b.onpaste=e=>{const t=(e.clipboardData.getData("text")||"").replace(/\D/g,"").slice(0,6);if(!t)return;e.preventDefault();t.split("").forEach((ch,k)=>boxes[k]&&(boxes[k].value=ch));boxes[Math.min(t.length,5)].focus();ready()};
+  });
+  agree.onchange=ready;
+  let left=600;const tick=setInterval(()=>{left--;const cd=$("#cd");if(!cd){clearInterval(tick);return}cd.firstChild.textContent=`Code expires in ${Math.floor(left/60)}:${String(left%60).padStart(2,"0")} · `;if(left<=570)$("#resend").disabled=false},1000);
+  $("#resend").onclick=()=>{left=600;$("#resend").disabled=true;toast("New code sent")};
+  $("#cancel").onclick=()=>{clearInterval(tick);close()};
+  $("#scrim").onclick=e=>{if(e.target.id==="scrim"){clearInterval(tick);close()}};
+  go.onclick=()=>{clearInterval(tick);close();o.done();toast("Signed")};
+  boxes[0].focus();
+}
+function returnSheet(no,done){
+  $("#layer").innerHTML=`<div class="scrim" id="scrim"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="rt">
+    <div class="sec"><h2 id="rt">Return to requester</h2><span>${no}</span></div>
+    <label class="f">Reason<textarea class="in-f" id="why" rows="3" placeholder="For example: 2 t of rebar already in store"></textarea></label>
+    <p class="muted">The request goes back to the requester to edit. All signatures are cleared and the cycle starts again.</p>
+    <div class="row"><button class="btn ghost" id="cancel">Cancel</button><button class="btn" id="go" style="flex:1" disabled>Return request</button></div>
+  </div></div>`;
+  $("#why").oninput=e=>$("#go").disabled=!e.target.value.trim();
+  $("#cancel").onclick=close;$("#scrim").onclick=e=>{if(e.target.id==="scrim")close()};
+  $("#go").onclick=()=>{close();done();toast("Returned with your reason")};
+  $("#why").focus();
+}
+
+function render(){
+  document.querySelectorAll("#tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===S.view));
+  const u=USERS[S.view];$("#me").innerHTML=`<span>${u.name}</span><b>${u.ini}</b>`;
+  ({new:vNew,store:vStore,proc:vProc,sig:vSig})[S.view]();
+}
+$("#tabs").onclick=e=>{const b=e.target.closest("button");if(!b)return;S.view=b.dataset.v;close();render();window.scrollTo(0,0)};
+render();
+}
+</script>

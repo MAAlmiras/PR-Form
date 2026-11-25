@@ -1,0 +1,54 @@
+{
+  "company": {
+    "name_en": "Lizam Construction",
+    "name_ar": "لزام للمقاولات",
+    "cr_number": "7014884485",
+    "logo": "logos/lizam-logo.png",
+    "accent": "#0b2a3c"
+  },
+  "issuer": {
+    "name": "Almiras Holding",
+    "logo": "logos/almiras-logo-en-navy.png",
+    "verify_base_url": "https://pr.almiras.sa/v/"
+  },
+  "pr": {
+    "number": "LZ-PR-2026-0147",
+    "revision": 2,
+    "status": "Approved",
+    "status_ar": "معتمد",
+    "project_name": "Al Narjis Residential Villas, Phase 2",
+    "project_number": "LZ-P-24017",
+    "date": "23 Nov 2026",
+    "required_by": "30 Nov 2026",
+    "deliver_to": "Site store, Al Narjis",
+    "notes": "Deliver cement and rebar first; site pour for villas 7–9 is scheduled for 1 Dec 2026.",
+    "items": [
+      {"desc": "Ordinary Portland cement, 50 kg bag", "unit": "Bag", "qty": 400, "avail": 120, "remarks": "Deliver in two batches"},
+      {"desc": "Deformed steel rebar Ø16 mm, grade 60, 12 m", "unit": "Ton", "qty": 6, "avail": 2, "remarks": "Revised from 8 t after store check"},
+      {"desc": "Annealed binding wire 1.6 mm, 20 kg roll", "unit": "Roll", "qty": 30, "avail": 0, "remarks": ""},
+      {"desc": "Shuttering plywood 18 mm, 1220 × 2440 mm", "unit": "Sheet", "qty": 150, "avail": 40, "remarks": "Film-faced"},
+      {"desc": "Timber 2\" × 4\", 4 m length", "unit": "Pcs", "qty": 300, "avail": 0, "remarks": ""},
+      {"desc": "PVC pipe 110 mm SDR 41, 6 m", "unit": "Length", "qty": 60, "avail": 12, "remarks": "Drainage, villas 7–9"},
+      {"desc": "Bituminous waterproofing membrane 4 mm", "unit": "Roll", "qty": 45, "avail": 0, "remarks": "Torch-applied, 10 m² roll"},
+      {"desc": "Concrete cover spacers 40 mm", "unit": "Pcs", "qty": 2000, "avail": 500, "remarks": ""},
+      {"desc": "Common wire nails 3\"", "unit": "Kg", "qty": 50, "avail": 15, "remarks": ""},
+      {"desc": "Safety helmet, white, EN 397", "unit": "Pcs", "qty": 25, "avail": 10, "remarks": "New labour batch"}
+    ]
+  },
+  "signers": [
+    {"role": "Project / Section Manager", "role_ar": "إدارة المشروع", "step": "Requested by", "name": "Khalid Al-Harbi", "email_masked": "k•••••@lizam•••.sa", "signed_at": "23 Nov 2026, 08:14", "device": "iPhone · Safari", "ip": "188.48.•••.21", "seed": 11},
+    {"role": "Store Manager", "role_ar": "المخزن", "step": "Stock checked by", "name": "Faisal Al-Otaibi", "email_masked": "f•••••@lizam•••.sa", "signed_at": "23 Nov 2026, 10:42", "device": "Android · Chrome", "ip": "51.36.•••.7", "seed": 27},
+    {"role": "Procurement", "role_ar": "المشتريات", "step": "Approved by", "name": "Omar Al-Shehri", "email_masked": "o•••••@lizam•••.sa", "signed_at": "23 Nov 2026, 13:05", "device": "Windows · Edge", "ip": "212.26.•••.90", "seed": 43}
+  ],
+  "history": [
+    {"at": "22 Nov 2026, 16:20", "who": "Khalid Al-Harbi", "what": "Created request, revision 1 (10 items)"},
+    {"at": "22 Nov 2026, 16:23", "who": "Khalid Al-Harbi", "what": "Signed revision 1 with email code"},
+    {"at": "22 Nov 2026, 17:02", "who": "Faisal Al-Otaibi", "what": "Returned to requester: 2 t of Ø16 rebar already in store, reduce quantity"},
+    {"at": "23 Nov 2026, 08:11", "who": "Khalid Al-Harbi", "what": "Revised request, revision 2 (rebar 8 t to 6 t); earlier signatures voided"},
+    {"at": "23 Nov 2026, 08:14", "who": "Khalid Al-Harbi", "what": "Signed revision 2 with email code"},
+    {"at": "23 Nov 2026, 10:40", "who": "Faisal Al-Otaibi", "what": "Entered quantities available in store for 10 items"},
+    {"at": "23 Nov 2026, 10:42", "who": "Faisal Al-Otaibi", "what": "Signed revision 2 with email code"},
+    {"at": "23 Nov 2026, 13:05", "who": "Omar Al-Shehri", "what": "Signed revision 2 with email code; request approved"},
+    {"at": "23 Nov 2026, 13:05", "who": "System", "what": "PDF generated, sealed and time-stamped"}
+  ]
+}
